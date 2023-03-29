@@ -3,11 +3,9 @@ default:
    outputs:
       dev:
          type: dameng
-         protocol: tcps
          host: "{{ env_var('DBT_ORACLE_HOST') }}"
+         port: 5236
          user: "{{ env_var('DBT_ORACLE_USER') }}"
          password: "{{ env_var('DBT_ORACLE_PASSWORD') }}"
-         port: 1522
-         service: "{{ env_var('DBT_ORACLE_SERVICE') }}"
          schema: "{{ env_var('DBT_ORACLE_SCHEMA') }}"
          threads: 1
