@@ -33,8 +33,7 @@ with open('README.md') as readme_file:
 
 requirements = [
         "dbt-core==1.4.5",
-        "cx_Oracle==8.3.0",
-        "oracledb==1.2.2"
+        "dmPython==2.4.5",
 ]
 
 test_requirements = [
@@ -43,18 +42,18 @@ test_requirements = [
 ]
 
 project_urls = {
-    'Documentation': 'https://docs.getdbt.com/reference/warehouse-profiles/oracle-profile',
-    'Source': 'https://github.com/oracle/dbt-oracle',
-    'Bug Tracker': 'https://github.com/oracle/dbt-oracle/issues',
-    'CI': 'https://github.com/oracle/dbt-oracle/actions',
-    "Release Notes": "https://github.com/oracle/dbt-oracle/releases"
+    'Documentation': 'https://github.com/sqlking22/dbt-dameng',
+    'Source': 'https://github.com/sqlking22/dbt-dameng',
+    'Bug Tracker': 'https://github.com/sqlking22/dbt-dameng/issues',
+    'CI': 'https://github.com/sqlking22/dbt-dameng/actions',
+    "Release Notes": "https://github.com/sqlking22/dbt-dameng/releases"
 }
 
-url = 'https://github.com/oracle/dbt-oracle'
+url = 'https://github.com/sqlking22/dbt-dameng'
 
-VERSION = '1.4.2'
+VERSION = '0.0.1'
 setup(
-    author="Oracle",
+    author="sqlking22",
     python_requires='>=3.7.2',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -68,13 +67,13 @@ setup(
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11'
     ],
-    description="dbt (data build tool) adapter for the Oracle database",
+    description="dbt (data build tool) adapter for the Dameng database",
     install_requires=requirements,
     license="Apache Software License 2.0",
     long_description=readme,
     long_description_content_type='text/markdown',
     include_package_data=True,
-    keywords='Oracle dbt',
+    keywords='Dameng dbt',
     name='dbt-dameng',
     packages=find_packages(),
     test_suite='tests',
