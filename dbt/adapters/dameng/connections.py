@@ -73,9 +73,8 @@ class DamengAdapterCredentials(Credentials):
         """
         List of keys to display in the `dbt debug` output. Omit password.
         """
-        return ('host', 'port',
-                'user', 'database', 'schema'
-                )
+        return ('host', 'port', 'user',
+                'database', 'schema')
 
     @classmethod
     def __pre_deserialize__(cls, data: Dict[Any, Any]) -> Dict[Any, Any]:
