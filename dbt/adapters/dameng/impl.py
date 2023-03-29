@@ -317,5 +317,83 @@ class DamengAdapter(SQLAdapter):
 
     def valid_incremental_strategies(self):
         return ["append", "merge"]
+# new add --------------------------------------------------------------------------------------------
+    @classmethod
+    def date_function(cls):
+        return "current_date"
+
+    @classmethod
+    def convert_text_type(cls, agate_table, col_idx):
+        return "varchar(255)"
+
+    @classmethod
+    def convert_datetime_type(cls, agate_table, col_idx):
+        return "datetime"
+
+    def connection_types(self):
+        return {
+            'dm': {
+                'method': 'default',
+                'options': {}
+            }
+        }
+
+    def acquire_connection(self, name=None):
+        if name is None:
+            name = 'dm'
+        profile = self.config.credentials.get(name)
+        return pydm.connect(
+            host=profile.get('host'),
+            port=profile.get('port'),
+            database=profile.get('database'),
+            user=profile.get('user'),
+            password=profile.get('password')
+        )
+
+    def list_schemas(self, database):
+        connection = self.acquire_connection(database)
+        cursor = connection.cursor()
+        cursor.execute("SHOW SCHEMAS;")
+        return [row[0] for row in cursor.fetchall()]
+
+    def list_relations(self, schema):
+        connection = self.acquire_connection(schema)
+        cursor = connection.cursor()
+        cursor.execute("SHOW TABLES;")
+        results = cursor.fetchall()
+        relations = []
+        for row in results:
+            relations.append({
+                'schema': schema,
+                'name': row[0],
+                'type': 'table'
+            })
+        return relations
+
+    def get_columns_in_relation(self, relation):
+        connection = self.acquire_connection(relation.get('schema'))
+        cursor = connection.cursor()
+        cursor.execute(f"DESCRIBE {relation.get('name')};")
+        results = cursor.fetchall()
+        columns = []
+        for row in results:
+            columns.append(Column(
+                name=row[0],
+                data_type=row[1],
+                table_name=relation.get('name'),
+                table_schema=relation.get('schema')
+            ))
+        return columns
+
+    def get_rows(self, schema, identifier):
+        connection = self.acquire_connection(schema)
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT * FROM {identifier};")
+        results = cursor.fetchall()
+        column_names = [desc[0] for desc in cursor.description]
+        rows = []
+        for row in results:
+            rows.append({column_names[i]: row[i] for i in range(len(column_names))})
+        return rows
 
 
