@@ -21,7 +21,6 @@ from typing import (
 from itertools import chain
 
 import agate
-
 import dbt.exceptions
 from dbt.adapters.base.relation import BaseRelation, InformationSchema
 from dbt.adapters.base.impl import GET_CATALOG_MACRO_NAME
@@ -145,11 +144,11 @@ class DamengAdapter(SQLAdapter):
         )
 
     def get_rows_different_sql(
-        self,
-        relation_a: DamengRelation,
-        relation_b: DamengRelation,
-        column_names: Optional[List[str]] = None,
-        except_operator: str = 'MINUS',
+            self,
+            relation_a: DamengRelation,
+            relation_b: DamengRelation,
+            column_names: Optional[List[str]] = None,
+            except_operator: str = 'MINUS',
     ) -> str:
         """Generate SQL for a query that returns a single row with a two
         columns: the number of rows that are different between the two
@@ -176,7 +175,7 @@ class DamengAdapter(SQLAdapter):
         return sql
 
     def timestamp_add_sql(
-        self, add_to: str, number: int = 1, interval: str = 'hour'
+            self, add_to: str, number: int = 1, interval: str = 'hour'
     ) -> str:
         # for backwards compatibility, we're compelled to set some sort of
         # default. A lot of searching has lead me to believe that the
@@ -318,3 +317,5 @@ class DamengAdapter(SQLAdapter):
 
     def valid_incremental_strategies(self):
         return ["append", "merge"]
+
+

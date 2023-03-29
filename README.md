@@ -1,11 +1,9 @@
 # dbt-dameng
 
-[![PyPI version](https://badge.fury.io/py/dbt-dameng.svg)](https://pypi.python.org/pypi/dbt-dameng)
-[![dbt-tests-adapter](https://github.com/dameng/dbt-dameng/actions/workflows/oracle-xe-adapter-tests.yml/badge.svg)](https://github.com/dameng/dbt-dameng/actions/workflows/dameng-xe-adapter-tests.yml)
 [![dbt-dameng docs](https://img.shields.io/badge/docs-read-blue)](https://docs.getdbt.com/reference/warehouse-setups/dameng-setup)
 [![dbt-dameng license](https://img.shields.io/badge/license-Apache%202.0-blue)][4]
 
-`dbt-dameng` implements [dbt (data build tool)](https://docs.getdbt.com/docs/introduction) functionalities for the Dameng database. 
+`dbt-dameng` implements [dbt (building-a-new-adapter)](https://docs.getdbt.com/guides/dbt-ecosystem/adapter-development/3-building-a-new-adapter) functionalities for the Dameng database. 
 
 > dbt-dameng was created and maintained by on [GitHub repo](https://github.com/sqlking22/dbt-dameng)
 

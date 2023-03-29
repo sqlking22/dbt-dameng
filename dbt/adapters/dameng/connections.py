@@ -63,6 +63,10 @@ class DamengAdapterCredentials(Credentials):
 
     @property
     def unique_field(self):
+        """
+        Hashed and included in anonymous telemetry to track adapter adoption.
+        Pick a field that can uniquely identify one team/organization building with this adapter
+        """
         return self.schema
 
     def _connection_keys(self) -> Tuple[str]:
@@ -120,7 +124,7 @@ class DamengAdapterConnectionManager(SQLConnectionManager):
             handle.client_identifier = f'dbt-dameng-client-{uuid.uuid4()}'
             connection.handle = handle
             connection.state = 'open'
-        except dmPython.DatabaseError as e:
+        except dmPython.Error as e:
             logger.info(f"Got an error when attempting to open an dameng "
                         f"connection: '{e}'")
             connection.handle = None
@@ -132,6 +136,14 @@ class DamengAdapterConnectionManager(SQLConnectionManager):
 
     @classmethod
     def cancel(cls, connection):
+        """
+        cancel is an instance method that gets a connection object and attempts to cancel any ongoing queries,
+        which is database dependent. Some databases don't support the concept of cancellation,
+        they can simply implement it via 'pass' and their adapter classes should
+        implement an is_cancelable that returns False - On ctrl+c connections may remain running.
+        This method must be implemented carefully,
+        as the affected connection will likely be in use in a different thread.
+        """
         connection_name = connection.name
         dameng_connection = connection.handle
 
@@ -150,13 +162,16 @@ class DamengAdapterConnectionManager(SQLConnectionManager):
         return 'OK'
 
     @classmethod
-    def get_response(cls, cursor):
+    def get_response(cls, cursor) -> AdapterResponse:
         # number of rows fetched for a SELECT statement or
         # have been affected by INSERT, UPDATE, DELETE and MERGE statements
-        return AdapterResponse(rows_affected=cursor.rowcount, _message='OK')
+        code = cursor.sqlstate or "OK"
+        rows = cursor.rowcount
+        status_message = f"{code} {rows}"
+        return AdapterResponse(_message=status_message, code=code, rows_affected=rows)
 
     @contextmanager
-    def exception_handler(self, sql):
+    def exception_handler(self, sql: str):
         try:
             yield
 
@@ -166,10 +181,9 @@ class DamengAdapterConnectionManager(SQLConnectionManager):
             try:
                 # attempt to release the connection
                 self.release()
-            except dmPython.Error:
+            except dmPython.DatabaseError:
                 logger.info("Failed to release connection!")
                 pass
-
             raise dbt.exceptions.DbtDatabaseError(str(e).strip()) from e
 
         except Exception as e:
