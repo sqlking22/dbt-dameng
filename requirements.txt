@@ -1,0 +1,3 @@
+dbt-core==1.4.5
+dmPython==2.4.5
+
