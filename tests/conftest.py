@@ -28,19 +28,17 @@ pytest_plugins = ["dbt.tests.fixtures.project"]
 @pytest.fixture(scope="class")
 def dbt_profile_target():
     return {
-        'type': 'oracle',
+        'type': 'dameng',
         'threads': 4,
-        'user': os.getenv('DBT_ORACLE_USER'),
-        'pass': os.getenv('DBT_ORACLE_PASSWORD'),
-        'host': os.getenv('DBT_ORACLE_HOST'),
-        'schema': os.getenv('DBT_ORACLE_SCHEMA'),
-        'database': os.getenv('DBT_ORACLE_DATABASE'),
-        'service': os.getenv('DBT_ORACLE_SERVICE'),
-        'protocol': os.getenv('DBT_ORACLE_PROTOCOL'),
-        'port': os.getenv('DBT_ORACLE_PORT')
+        'user': os.getenv('DBT_DAMENG_USER'),
+        'pass': os.getenv('DBT_DAMENG_PASSWORD'),
+        'host': os.getenv('DBT_DAMENG_HOST'),
+        'schema': os.getenv('DBT_DAMENG_SCHEMA'),
+        'database': os.getenv('DBT_DAMENG_DATABASE'),
+        'port': os.getenv('DBT_DAMENG_PORT')
     }
 
 
 @pytest.fixture(scope="class")
 def unique_schema(request, prefix) -> str:
-    return os.getenv('DBT_ORACLE_SCHEMA')
+    return os.getenv('DBT_DAMENG_SCHEMA')
