@@ -346,11 +346,27 @@ class DamengAdapter(SQLAdapter):
                 grants_dict.update({privilege: [grantee]})
         return grants_dict
 
-    def list_schemas(self, database):
-        connection = self.acquire_connection(database)
-        cursor = connection.cursor()
-        cursor.execute("SHOW SCHEMAS")
-        return [row[0] for row in cursor.fetchall()]
+    # def list_schemas(self):
+    #     # connection = self.acquire_connection(database)
+    #     # cursor = connection.cursor()
+    #     # cursor.execute("SHOW SCHEMAS")
+    #     # return [row[0] for row in cursor.fetchall()]
+    #     query = """
+    #     SELECT distinct A.NAME SCHEMA_NAME FROM SYSOBJECTS A,DBA_USERS B
+    #     WHERE A.PID=B.USER_ID AND A.TYPE$='SCH' """
+    #     res = self.execute(query)
+    #     schemas = []
+    #     for row in res:
+    #         schemas.append(row[0])
+    #     return schemas
+
+    def create_schema(self, database, if_not_exists=False):
+        # connection = self.acquire_connection(schema)
+        # cursor = connection.cursor()
+        database = str(database).split(".")[0]
+        query = f"CREATE SCHEMA {'IF NOT EXISTS ' if if_not_exists else ''}{database}"
+        # cursor.execute(query)
+        self.execute(query)
 
     def list_relations(self, schema):
         connection = self.acquire_connection(schema)

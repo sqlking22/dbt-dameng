@@ -42,23 +42,21 @@ class DamengAdapterCredentials(Credentials):
     of parameters profiled in the profile.
     """
     # Mandatory required arguments.
+    host: str
+    port: int
     user: str
     password: str
-    # Specifying database is optional
-    database: Optional[str]
-    schema: str
-
-    host: Optional[str] = None
-    port: Optional[Union[str, int]] = None
+    database: str
 
     _ALIASES = {
-        'dbname': 'database',
         'server': 'host',
+        'dbname': 'database',
         'pass': 'password',
     }
 
     @property
     def type(self):
+        """Return name of adapter."""
         return 'dameng'
 
     @property
@@ -67,33 +65,14 @@ class DamengAdapterCredentials(Credentials):
         Hashed and included in anonymous telemetry to track adapter adoption.
         Pick a field that can uniquely identify one team/organization building with this adapter
         """
-        return self.schema
+        return self.host
 
     def _connection_keys(self) -> Tuple[str]:
         """
         List of keys to display in the `dbt debug` output. Omit password.
         """
-        return ('host', 'port', 'user',
-                'database', 'schema')
-
-    @classmethod
-    def __pre_deserialize__(cls, data: Dict[Any, Any]) -> Dict[Any, Any]:
-        # If database is not defined as adapter credentials
-        data = super().__pre_deserialize__(data)
-        if "database" not in data:
-            data["database"] = None
-        return data
-
-    def __post_init__(self):
-        # dameng classifies database and schema as the same thing
-        if self.database is not None and self.database != self.schema:
-            raise dbt.exceptions.RuntimeException(
-                f"    schema: {self.schema} \n"
-                f"    database: {self.database} \n"
-                f"On Dameng, database must be omitted or have the same value as"
-                f" schema."
-            )
-        self.database = None
+        return ('host', 'port'
+                , 'user', 'schema', 'database')
 
 
 class DamengAdapterConnectionManager(SQLConnectionManager):
@@ -109,18 +88,16 @@ class DamengAdapterConnectionManager(SQLConnectionManager):
         conn_config = {
             'user': credentials.user,
             'password': credentials.password,
-            'server': credentials.host,
+            'host': credentials.host,
             'port': credentials.port,
             'autoCommit': True
         }
 
         try:
             handle = dmPython.connect(**conn_config)
-            if credentials.schema:
-                handle.cursor().execute("set schema {}".format(credentials.schema))
-            # client_identifier and module are saved in corresponding columns in v$session
-            handle.module = f'dbt-{dbt_version}'
-            handle.client_identifier = f'dbt-dameng-client-{uuid.uuid4()}'
+            if credentials.database:
+                cursor = handle.cursor()
+                cursor.execute("set schema {}".format(credentials.database))
             connection.handle = handle
             connection.state = 'open'
         except dmPython.Error as e:
@@ -164,7 +141,7 @@ class DamengAdapterConnectionManager(SQLConnectionManager):
     def get_response(cls, cursor) -> AdapterResponse:
         # number of rows fetched for a SELECT statement or
         # have been affected by INSERT, UPDATE, DELETE and MERGE statements
-        code = cursor.sqlstate or "OK"
+        code = cursor.statement or "OK"
         rows = cursor.rowcount
         status_message = f"{code} {rows}"
         return AdapterResponse(_message=status_message, code=code, rows_affected=rows)
@@ -173,7 +150,6 @@ class DamengAdapterConnectionManager(SQLConnectionManager):
     def exception_handler(self, sql: str):
         try:
             yield
-
         except dmPython.DatabaseError as e:
             logger.info('Dameng error: {}'.format(str(e)))
 

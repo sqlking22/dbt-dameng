@@ -24,14 +24,12 @@ The following environment variables should be set to test `dbt-oracle`
     TNS_ADMIN
 
     # Database connection config - dbt specific variables
-    DBT_ORACLE_USER
-    DBT_ORACLE_HOST
-    DBT_ORACLE_PORT
-    DBT_ORACLE_PROTOCOL
-    DBT_ORACLE_SERVICE
-    DBT_ORACLE_PASSWORD
-    DBT_ORACLE_DATABASE
-    DBT_ORACLE_SCHEMA
+    DBT_DAMENG_USER
+    DBT_DAMENG_HOST
+    DBT_DAMENG_PORT
+    DBT_DAMENG_PASSWORD
+    DBT_DAMENG_DATABASE
+    DBT_DAMENG_SCHEMA
 ```
 
 ## Adapter Plugin Tests <a name='adapter-plugin-tests'></a>
@@ -43,16 +41,16 @@ dbt-labs has developed a package [dbt-tests-adapter](https://pypi.org/project/db
 Clone the project repository into a local directory.
 
 ```bash
-git clone git@github.com:oracle/dbt-oracle.git
+git clone git@github.com:sqlking22/dbt-dameng.git
 ```
 
 Create a python3.7+ virtual environment
 ```bash
-cd dbt-oracle
+cd dbt-dameng
 python3.8 -m venv .venv
 source .venv/bin/activate
 ```
-Install `dbt-oracle` project in development mode
+Install `dbt-dameng` project in development mode
 ```bash
 pip install -e .
 ```
@@ -63,7 +61,7 @@ Install `dbt-tests-adapter` and `pytest` in your project's virtual environment
 pip install dbt-tests-adapter pytest
 ```
 
-To run the test suite, just type the `pytest` command from the cloned `dbt-oracle` project directory
+To run the test suite, just type the `pytest` command from the cloned `dbt-dameng` project directory
 
 ```pytest
 pytest
@@ -73,7 +71,7 @@ pytest
 Run pytest
 ============================= test session starts ==============================
 platform linux -- Python 3.9.13, pytest-7.1.2, pluggy-1.0.0
-rootdir: /home/runner/work/dbt-oracle/dbt-oracle, configfile: pytest.ini, testpaths: tests/functional
+rootdir: /home/runner/work/dbt-dameng/dbt-dameng, configfile: pytest.ini, testpaths: tests/functional
 collected 24 items
 tests/functional/adapter/test_basic.py ..........                        [ 41%]
 tests/functional/adapter/test_config.py ....                             [ 58%]
