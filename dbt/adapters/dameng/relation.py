@@ -22,14 +22,12 @@ from dbt.adapters.base.relation import BaseRelation, Policy
 
 @dataclass
 class DamengQuotePolicy(Policy):
-    database: bool = False
     schema: bool = False
     identifier: bool = False
 
 
 @dataclass
 class DamengIncludePolicy(Policy):
-    database: bool = False
     schema: bool = True
     identifier: bool = True
 

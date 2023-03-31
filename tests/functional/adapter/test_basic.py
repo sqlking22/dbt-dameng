@@ -103,11 +103,11 @@ select * from {{ upstream }}
 """
 
 
-class TestSimpleMaterializationsOracle(BaseSimpleMaterializations):
+class TestSimpleMaterializationsDameng(BaseSimpleMaterializations):
     pass
 
 
-class TestSingularTestsOracle(BaseSingularTests):
+class TestSingularTestsDameng(BaseSingularTests):
 
     @pytest.fixture(scope="class")
     def tests(self):
@@ -117,7 +117,7 @@ class TestSingularTestsOracle(BaseSingularTests):
         }
 
 
-class TestSingularTestsEphemeralOracle(BaseSingularTestsEphemeral):
+class TestSingularTestsEphemeralDameng(BaseSingularTestsEphemeral):
 
     @pytest.fixture(scope="class")
     def models(self):
@@ -129,31 +129,31 @@ class TestSingularTestsEphemeralOracle(BaseSingularTestsEphemeral):
         }
 
 
-class TestEmptyOracle(BaseEmpty):
+class TestEmptyDameng(BaseEmpty):
     pass
 
 
-class TestEphemeralOracle(BaseEphemeral):
+class TestEphemeralDameng(BaseEphemeral):
     pass
 
 
-class TestIncrementalOracle(BaseIncremental):
+class TestIncrementalDameng(BaseIncremental):
     pass
 
 
-class TestGenericTestsOracle(BaseGenericTests):
+class TestGenericTestsDameng(BaseGenericTests):
     pass
 
 
-class TestSnapshotCheckColsOracle(BaseSnapshotCheckCols):
+class TestSnapshotCheckColsDameng(BaseSnapshotCheckCols):
     pass
 
 
-class TestSnapshotTimestampOracle(BaseSnapshotTimestamp):
+class TestSnapshotTimestampDameng(BaseSnapshotTimestamp):
     pass
 
 
-class TestBaseAdapterMethodOracle(BaseAdapterMethod):
+class TestBaseAdapterMethodDameng(BaseAdapterMethod):
 
     @pytest.fixture(scope="class")
     def models(self):
@@ -164,7 +164,7 @@ class TestBaseAdapterMethodOracle(BaseAdapterMethod):
         }
 
 
-class TestIncrementalNotSchemaChangeOracle(BaseIncrementalNotSchemaChange):
+class TestIncrementalNotSchemaChangeDameng(BaseIncrementalNotSchemaChange):
 
     @pytest.fixture(scope="class")
     def models(self):
