@@ -43,12 +43,10 @@ class DamengAdapterCredentials(Credentials):
     """
     # Mandatory required arguments.
     host: str
-    port: str
+    port: int
     user: str
     password: str
-    schema: str
     database: str
-    # database: Optional[str] = None
 
     _ALIASES = {
         'server': 'host',
